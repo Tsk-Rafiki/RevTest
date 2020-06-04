@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">RevTest</string>
+    <string name="rates_header">Rates</string>
 </resources>
