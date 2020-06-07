@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="16dp"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="Roboto"
+            android:letterSpacing="-0.02"
+            android:lineHeight="24dp"
+            android:textColor="#191c1f"
+            android:textFontWeight="500"
+            android:textSize="16sp"
+            tools:targetApi="p" />
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:letterSpacing="-0.011"
+            android:lineHeight="20dp"
+            android:textColor="#8B959E"
+            android:textSize="14sp"
+            tools:targetApi="p" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/amount"
+        android:layout_width="wrap_content"
+        android:minWidth="24dp"
+        android:fontFamily="Roboto"
+        android:textFontWeight="500"
+        android:textSize="20sp"
+        android:lineHeight="28dp"
+        android:maxLines="1"
+        android:maxLength="8"
+        android:textColor="#191C1F"
+        android:inputType="numberDecimal"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        tools:targetApi="p" />
+</RelativeLayout>
