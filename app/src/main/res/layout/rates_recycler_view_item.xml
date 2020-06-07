@@ -3,9 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="16dp"
-    android:orientation="horizontal">
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="horizontal"
+    android:padding="16dp">
 
     <ImageView
         android:id="@+id/image"
@@ -46,16 +47,17 @@
     <EditText
         android:id="@+id/amount"
         android:layout_width="wrap_content"
-        android:minWidth="24dp"
-        android:fontFamily="Roboto"
-        android:textFontWeight="500"
-        android:textSize="20sp"
-        android:lineHeight="28dp"
-        android:maxLines="1"
-        android:maxLength="8"
-        android:textColor="#191C1F"
-        android:inputType="numberDecimal"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
+        android:fontFamily="Roboto"
+        android:imeOptions="actionDone"
+        android:inputType="numberDecimal"
+        android:lineHeight="28dp"
+        android:maxLength="8"
+        android:maxLines="1"
+        android:minWidth="24dp"
+        android:textColor="#191C1F"
+        android:textFontWeight="500"
+        android:textSize="20sp"
         tools:targetApi="p" />
 </RelativeLayout>
