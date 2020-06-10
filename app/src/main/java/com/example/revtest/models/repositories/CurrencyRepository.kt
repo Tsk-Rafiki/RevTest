@@ -10,9 +10,13 @@ object CurrencyRepositoryProvider {
     fun getCurrencyRepository() = CurrencyRepository(RevolutApiService.create())
 }
 
-class CurrencyRepository(private val apiService: RevolutApiService) {
-    fun getCurrencyRate(currency: String): Observable<CurrencyRates> =
+class CurrencyRepository(private val apiService: RevolutApiService) : ICurrencyRepository{
+    override fun getCurrencyRate(currency: String): Observable<CurrencyRates> =
         apiService.getCurrencyRates(currency)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
+}
+
+interface ICurrencyRepository {
+    fun getCurrencyRate(currency: String): Observable<CurrencyRates>
 }

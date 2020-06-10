@@ -4,7 +4,7 @@ import com.example.revtest.models.viewModels.CurrencyRatesViewModel
 import io.reactivex.Observable
 
 interface ICurrencyRatesPresenter {
-    fun getCurrencyRateData(currency: String = "EUR" ): Observable<List<CurrencyRatesViewModel>>
-    fun onResume() : Unit
-    fun onPause() : Unit
+    fun setBaseCurrency(baseCurrency: String)
+    fun setNewBaseCurrencyValue(currencyValue: String)
+    fun getCurrencyRateData(): Observable<List<CurrencyRatesViewModel>>
 }

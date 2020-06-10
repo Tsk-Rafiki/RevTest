@@ -2,33 +2,74 @@ package com.example.revtest.presenters
 
 import android.util.Log
 import com.example.revtest.models.repositories.CurrencyRepositoryProvider
+import com.example.revtest.models.repositories.ICurrencyRepository
+import com.example.revtest.models.utils.roundTo2
 import io.reactivex.Observable
 import com.example.revtest.models.viewModels.CurrencyRatesViewModel
+import io.reactivex.functions.BiFunction
+import io.reactivex.subjects.BehaviorSubject
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.properties.Delegates
 
-class CurrencyRatesPresenter : ICurrencyRatesPresenter {
-    private val currencyRepository = CurrencyRepositoryProvider.getCurrencyRepository()
+class CurrencyRatesPresenter(private val currencyRepository: ICurrencyRepository = CurrencyRepositoryProvider.getCurrencyRepository()) :
+    ICurrencyRatesPresenter {
 
-    override fun onResume() {
+    private var baseCurrency = "EUR"
+    private var baseCurrencyObservable: Double by Delegates.observable(1.0) { _, _, newValue ->
+        currencyValueSubject.onNext(newValue)
+    }
+    private val currencyValueSubject: BehaviorSubject<Double> = BehaviorSubject.createDefault(1.0)
+    private val ratesLooper = Observable.interval(0, 1, TimeUnit.SECONDS)
+        .flatMap {
+            Log.d("ratesLooper", "Current thread: ${Thread.currentThread().name}")
+            getLatestRates()
+        }
+        .repeat()
 
+    override fun getCurrencyRateData(): Observable<List<CurrencyRatesViewModel>> =
+        Observable.combineLatest<List<CurrencyRatesViewModel>, Double, List<CurrencyRatesViewModel>>(
+            ratesLooper,
+            currencyValueSubject,
+            BiFunction { rates, currency ->
+                Log.d("getCurrencyRateData", "Current thread: ${Thread.currentThread().name}")
+                rates.map {
+                    CurrencyRatesViewModel(
+                        countryIcon = it.countryIcon,
+                        currency = it.currency,
+                        description = it.description,
+                        isBaseCurrency = it.isBaseCurrency,
+                        value = if (!it.isBaseCurrency) (it.value * currency).roundTo2()
+                            else it.value
+                    )
+                }
+            }
+        )
+
+
+    override fun setNewBaseCurrencyValue(currencyValue: String) {
+        baseCurrencyObservable = try {
+            currencyValue.toDouble()
+        } catch (ex: NumberFormatException) {
+            1.0
+        }.roundTo2()
     }
 
-    override fun getCurrencyRateData(currency: String): Observable<List<CurrencyRatesViewModel>> =
-        Observable.interval(1, TimeUnit.SECONDS)
-            .flatMap { getLatestRates(currency) }
-            .repeat()
+    override fun setBaseCurrency(baseCurrency: String) {
+        this.baseCurrency = baseCurrency
+    }
 
-
-    private fun getLatestRates(currency: String) =
-        currencyRepository.getCurrencyRate(currency.toUpperCase(Locale.getDefault()))
+    private fun getLatestRates() =
+        currencyRepository.getCurrencyRate(baseCurrency.toUpperCase(Locale.getDefault()))
             .map { result ->
+                Log.d("getLatestRates", "Current thread: ${Thread.currentThread().name}")
                 result.rates.map { item ->
                     CurrencyRatesViewModel(
                         countryIcon = 1,
                         currency = item.key,
                         description = item.key,
-                        value = item.value
+                        value = item.value,
+                        isBaseCurrency = false
                     )
                 }
                     .toMutableList()
@@ -38,18 +79,11 @@ class CurrencyRatesPresenter : ICurrencyRatesPresenter {
                                 1,
                                 result.baseCurrency,
                                 result.baseCurrency,
-                                0.0,
+                                baseCurrencyObservable,
                                 isBaseCurrency = true
                             )
                         add(0, baseCurrency)
                     }
                     .toList()
-
-
             }
-
-    override fun onPause() {
-
-    }
-
 }

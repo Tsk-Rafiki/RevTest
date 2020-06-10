@@ -4,6 +4,6 @@ data class CurrencyRatesViewModel(
     val countryIcon: Int = -1,
     val currency: String,
     val description: String,
-    val value: Double,
+    var value: Double,
     val isBaseCurrency: Boolean = false
 )
