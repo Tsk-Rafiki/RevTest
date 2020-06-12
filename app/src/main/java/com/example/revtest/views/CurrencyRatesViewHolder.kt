@@ -1,6 +1,7 @@
 package com.example.revtest.views
 
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.EditText
@@ -8,6 +9,7 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.revtest.R
+import com.example.revtest.models.utils.setCursorToEnd
 import com.example.revtest.models.viewModels.CurrencyRatesViewModel
 import com.example.revtest.views.CurrencyRatesListAdapter.IOnRateItemClickListener
 
@@ -35,17 +37,14 @@ class CurrencyRatesViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
         textField?.removeTextChangedListener(textWatcher)
         if (!viewModel.isBaseCurrency) {
             textField?.setText(viewModel.value.toString())
-            textField?.isFocusable = false
+//            textField?.isFocusable = false
+            textField?.setOnClickListener {
+                onItemClickListener.onItemClick(viewModel.currency)
+            }
         } else {
-            textField?.isFocusable = true
+//            textField?.isFocusable = true
             textField?.setOnFocusChangeListener { v, hasFocus ->
-                textField?.let {
-                    try {
-                        textField?.setSelection(it.text.length)
-                    } catch (ex: IndexOutOfBoundsException) {
-                        ex.printStackTrace()
-                    }
-                }
+                textField?.setCursorToEnd()
                 onItemClickListener.onFocusChanged(v, hasFocus)
             }
             textField?.addTextChangedListener(textWatcher)

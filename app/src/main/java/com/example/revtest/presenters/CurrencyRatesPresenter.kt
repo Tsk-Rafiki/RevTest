@@ -82,10 +82,10 @@ class CurrencyRatesPresenter(private val currencyRepository: ICurrencyRepository
                     .apply {
                         val baseCurrency =
                             CurrencyRatesViewModel(
-                                1,
-                                result.baseCurrency,
-                                result.baseCurrency,
-                                baseCurrencyObservable,
+                                countryIcon = 1,
+                                currency = result.baseCurrency,
+                                description = result.baseCurrency,
+                                value = baseCurrencyObservable,
                                 isBaseCurrency = true
                             )
                         add(0, baseCurrency)

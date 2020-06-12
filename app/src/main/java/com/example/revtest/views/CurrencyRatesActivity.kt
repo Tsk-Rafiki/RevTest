@@ -1,9 +1,11 @@
 package com.example.revtest.views
 
 import android.app.AlertDialog
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
@@ -14,6 +16,7 @@ import com.example.revtest.views.CurrencyRatesListAdapter.IOnRateItemClickListen
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 class CurrencyRatesActivity : AppCompatActivity(), IOnRateItemClickListener {
 
@@ -67,7 +70,9 @@ class CurrencyRatesActivity : AppCompatActivity(), IOnRateItemClickListener {
     }
 
     override fun onFocusChanged(v: View, hasFocus: Boolean) {
-
+        if (!hasFocus) {
+            (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(v.windowToken, 0)
+        }
     }
 }
 

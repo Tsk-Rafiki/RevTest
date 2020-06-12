@@ -1,6 +1,7 @@
 package com.example.revtest.models.utils
 
 import android.util.Log
+import android.widget.EditText
 import kotlin.math.roundToInt
 
 fun Double.roundTo2() = try {
@@ -10,3 +11,5 @@ fun Double.roundTo2() = try {
         Log.e("round2", "Exception: $ex")
         1.0
     }
+
+fun EditText.setCursorToEnd() = this.setSelection(this.text.length)
