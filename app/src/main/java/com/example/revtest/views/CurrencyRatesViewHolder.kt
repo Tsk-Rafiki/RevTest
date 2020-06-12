@@ -25,7 +25,11 @@ class CurrencyRatesViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
         layout = itemView.findViewById(R.id.ratesItemLayout)
     }
 
-    fun bind(viewModel: CurrencyRatesViewModel, textWatcher: TextWatcher?, onItemClickListener: IOnRateItemClickListener) {
+    fun bind(
+        viewModel: CurrencyRatesViewModel,
+        textWatcher: TextWatcher?,
+        onItemClickListener: IOnRateItemClickListener
+    ) {
         title?.text = viewModel.currency
         description?.text = viewModel.description
         textField?.removeTextChangedListener(textWatcher)
@@ -34,10 +38,17 @@ class CurrencyRatesViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
             textField?.isFocusable = false
         } else {
             textField?.isFocusable = true
-            textField?.addTextChangedListener(textWatcher)
             textField?.setOnFocusChangeListener { v, hasFocus ->
+                textField?.let {
+                    try {
+                        textField?.setSelection(it.text.length)
+                    } catch (ex: IndexOutOfBoundsException) {
+                        ex.printStackTrace()
+                    }
+                }
                 onItemClickListener.onFocusChanged(v, hasFocus)
             }
+            textField?.addTextChangedListener(textWatcher)
         }
 
         layout?.setOnClickListener {

@@ -7,8 +7,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.revtest.models.viewModels.CurrencyRatesViewModel
 
-class CurrencyRatesListAdapter(private val textWatcher: TextWatcher?, private val onItemClickListener: IOnRateItemClickListener) : RecyclerView.Adapter<CurrencyRatesViewHolder>() {
-        private var items = listOf<CurrencyRatesViewModel>()
+class CurrencyRatesListAdapter(
+    private val textWatcher: TextWatcher?,
+    private val onItemClickListener: IOnRateItemClickListener
+) : RecyclerView.Adapter<CurrencyRatesViewHolder>() {
+    private var items = listOf<CurrencyRatesViewModel>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyRatesViewHolder {
         val inflater = LayoutInflater.from(parent.context)
