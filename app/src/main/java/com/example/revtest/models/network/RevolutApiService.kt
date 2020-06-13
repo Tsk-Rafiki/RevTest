@@ -1,6 +1,6 @@
 package com.example.revtest.models.network
 
-import com.example.revtest.models.dto.CurrencyRates
+import com.example.revtest.models.data.dto.CurrencyRates
 import io.reactivex.Observable
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

@@ -1,6 +1,6 @@
 package com.example.revtest.models.repositories
 
-import com.example.revtest.models.dto.CurrencyRates
+import com.example.revtest.models.data.dto.CurrencyRates
 import com.example.revtest.models.network.RevolutApiService
 import io.reactivex.Observable
 

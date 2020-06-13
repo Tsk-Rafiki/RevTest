@@ -1,4 +1,4 @@
-package com.example.revtest.models.dto
+package com.example.revtest.models.data.dto
 
 import com.google.gson.annotations.SerializedName
 

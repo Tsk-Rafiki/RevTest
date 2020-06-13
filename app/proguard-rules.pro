@@ -26,7 +26,7 @@
 # Retrofit does reflection on method and parameter annotations.
 -keepattributes RuntimeVisibleAnnotations, RuntimeVisibleParameterAnnotations
 
--keep class com.example.revtest.models.dto.** { *; }
+-keep class com.example.revtest.models.data.dto.** { *; }
 
 # Retain service method parameters when optimizing.
 -keepclassmembers,allowshrinking,allowobfuscation interface * {

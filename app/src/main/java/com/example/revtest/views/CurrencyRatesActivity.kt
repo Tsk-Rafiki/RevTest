@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import com.example.revtest.R
 import com.example.revtest.models.utils.EditTextWatcher
 import com.example.revtest.presenters.CurrencyRatesPresenter
+import com.example.revtest.presenters.ICurrencyRatesPresenter
 import com.example.revtest.views.CurrencyRatesListAdapter.IOnRateItemClickListener
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
@@ -20,15 +21,18 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class CurrencyRatesActivity : AppCompatActivity(), IOnRateItemClickListener {
 
-    private val presenter = CurrencyRatesPresenter()
-    private val textWatcher = EditTextWatcher(presenter)
-    private val adapter: CurrencyRatesListAdapter =
-        CurrencyRatesListAdapter(textWatcher, this).apply { setHasStableIds(true) }
+    private lateinit var presenter: ICurrencyRatesPresenter
+    private lateinit var textWatcher: EditTextWatcher
+    private lateinit var adapter: CurrencyRatesListAdapter
     private var disposable: Disposable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        presenter = CurrencyRatesPresenter(context = this)
+        textWatcher = EditTextWatcher(presenter)
+        adapter = CurrencyRatesListAdapter(textWatcher, this).apply { setHasStableIds(true) }
+
         (recyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         recyclerView?.layoutManager = LinearLayoutManager(this)
         recyclerView?.adapter = adapter
@@ -71,7 +75,10 @@ class CurrencyRatesActivity : AppCompatActivity(), IOnRateItemClickListener {
 
     override fun onFocusChanged(v: View, hasFocus: Boolean) {
         if (!hasFocus) {
-            (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(v.windowToken, 0)
+            (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
+                v.windowToken,
+                0
+            )
         }
     }
 }

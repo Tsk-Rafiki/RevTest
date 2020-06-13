@@ -5,43 +5,39 @@
     android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
+    android:gravity="center_vertical"
+    android:layout_gravity="center_vertical"
     android:id="@+id/ratesItemLayout"
     android:orientation="horizontal"
     android:padding="16dp">
 
     <ImageView
         android:id="@+id/image"
+        android:foregroundGravity="center_vertical"
         android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp" />
+        android:layout_height="40dp"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/image"
         android:layout_marginStart="16dp"
+        android:gravity="center_vertical"
+        android:foregroundGravity="center_vertical"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="Roboto"
-            android:letterSpacing="-0.02"
-            android:lineHeight="24dp"
-            android:textColor="#191c1f"
-            android:textFontWeight="500"
-            android:textSize="16sp"
+            style="@style/RatesItemHeader"
             tools:targetApi="p" />
 
         <TextView
             android:id="@+id/description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:letterSpacing="-0.011"
-            android:lineHeight="20dp"
-            android:textColor="#8B959E"
-            android:textSize="14sp"
+            style="@style/RatesItemDescription"
             tools:targetApi="p" />
     </LinearLayout>
 
@@ -50,15 +46,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:fontFamily="Roboto"
-        android:imeOptions="actionDone"
-        android:inputType="numberDecimal"
-        android:lineHeight="28dp"
-        android:maxLength="8"
-        android:maxLines="1"
-        android:minWidth="24dp"
-        android:textColor="#191C1F"
-        android:textFontWeight="500"
-        android:textSize="20sp"
+        style="@style/EditTextStyle"
         tools:targetApi="p" />
 </RelativeLayout>

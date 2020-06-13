@@ -1,10 +1,10 @@
 package com.example.revtest.views
 
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -19,12 +19,14 @@ class CurrencyRatesViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
     private var description: TextView? = null
     private var textField: EditText? = null
     private var layout: RelativeLayout? = null
+    private var countryFlag: ImageView? = null
 
     init {
         title = itemView.findViewById(R.id.title)
         description = itemView.findViewById(R.id.description)
         textField = itemView.findViewById(R.id.amount)
         layout = itemView.findViewById(R.id.ratesItemLayout)
+        countryFlag = itemView.findViewById(R.id.image)
     }
 
     fun bind(
@@ -34,15 +36,15 @@ class CurrencyRatesViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
     ) {
         title?.text = viewModel.currency
         description?.text = viewModel.description
+        countryFlag?.setImageResource(viewModel.countryIconId)
         textField?.removeTextChangedListener(textWatcher)
+
         if (!viewModel.isBaseCurrency) {
             textField?.setText(viewModel.value.toString())
-//            textField?.isFocusable = false
             textField?.setOnClickListener {
                 onItemClickListener.onItemClick(viewModel.currency)
             }
         } else {
-//            textField?.isFocusable = true
             textField?.setOnFocusChangeListener { v, hasFocus ->
                 textField?.setCursorToEnd()
                 onItemClickListener.onFocusChanged(v, hasFocus)
