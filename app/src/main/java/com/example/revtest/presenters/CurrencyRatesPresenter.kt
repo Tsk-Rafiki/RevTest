@@ -72,11 +72,11 @@ class CurrencyRatesPresenter(
             ratesLooper,
             currencyValueSubject,
             BiFunction { rates, currency ->
-
                 rates.map { rate ->
                     val currentCurrencyData = currencyData.firstOrNull { it.name == rate.currency }
                     val value =
-                        if (baseCurrency == selectedCurrency) currency * rate.rate else selectedCurrencyValue * rate.rate
+                        if (baseCurrency == selectedCurrency) currency * rate.rate
+                        else selectedCurrencyValue * rate.rate
 
                     CurrencyRatesViewModel(
                         countryIconId = currentCurrencyData?.iconId

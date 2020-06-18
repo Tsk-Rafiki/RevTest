@@ -83,10 +83,10 @@ class CurrencyRatesActivity : AppCompatActivity(), IOnRateItemClickListener {
     ) {
         if (hasFocus) {
             onItemClick(currency, currencyValue)
-//            (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).toggleSoftInput(
-//                InputMethodManager.SHOW_FORCED,
-//                0
-//            )
+            (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).toggleSoftInput(
+                InputMethodManager.SHOW_FORCED,
+                0
+            )
         } else {
             (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
                 v.windowToken,
