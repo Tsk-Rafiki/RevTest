@@ -110,7 +110,6 @@ class CurrencyRatesPresenter(
     private fun getLatestRates() =
         currencyRepository.getCurrencyRate(baseCurrency.toUpperCase(Locale.getDefault()))
             .map { result: CurrencyRates ->
-                baseCurrency = selectedCurrency
                 baseCurrencyValueObservable = selectedCurrencyValue
                 result.rates.map { item ->
                     CurrencyRatesViewModel(
