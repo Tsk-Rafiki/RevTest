@@ -38,7 +38,9 @@ class CurrencyRatesPresenter(
 
     private val currencyValueSubject = BehaviorSubject.createDefault(BASE_CURRENCY_DEFAULT_VALUE)
 
-    private var baseCurrencyValueObservable: Double by Delegates.observable(BASE_CURRENCY_DEFAULT_VALUE) { _, oldValue, newValue ->
+    private var baseCurrencyValueObservable: Double by Delegates.observable(
+        BASE_CURRENCY_DEFAULT_VALUE
+    ) { _, oldValue, newValue ->
         if (oldValue != newValue)
             currencyValueSubject.onNext(newValue)
     }
@@ -73,10 +75,12 @@ class CurrencyRatesPresenter(
 
                 rates.map { rate ->
                     val currentCurrencyData = currencyData.firstOrNull { it.name == rate.currency }
-                    val value = if (baseCurrency == selectedCurrency) currency * rate.rate else selectedCurrencyValue * rate.rate
+                    val value =
+                        if (baseCurrency == selectedCurrency) currency * rate.rate else selectedCurrencyValue * rate.rate
 
                     CurrencyRatesViewModel(
-                        countryIconId = currentCurrencyData?.iconId ?: R.drawable.ic_launcher_background,
+                        countryIconId = currentCurrencyData?.iconId
+                            ?: R.drawable.ic_launcher_background,
                         currency = currentCurrencyData?.name ?: UNKNOWN_CURRENCY_TEXT,
                         description = currentCurrencyData?.description ?: UNKNOWN_CURRENCY_TEXT,
                         isBaseCurrency = rate.currency == baseCurrency,

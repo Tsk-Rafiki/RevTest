@@ -58,9 +58,7 @@ class CurrencyRatesViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
             }
             if (viewModel.isBaseCurrency) {
                 it.addTextChangedListener(textWatcher)
-//                it.isFocusable = true
             } else {
-//                it.isFocusable = false
                 it.setOnClickListener {
                     setFocusOnTextField()
                     onItemClickListener.onItemClick(viewModel.currency, viewModel.rate.toString())
@@ -74,7 +72,12 @@ class CurrencyRatesViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
                 } else false
             }
             it.setOnFocusChangeListener { v, hasFocus ->
-                onItemClickListener.onFocusChanged(v, hasFocus)
+                onItemClickListener.onFocusChanged(
+                    v,
+                    hasFocus,
+                    viewModel.currency,
+                    viewModel.rate.toString()
+                )
             }
         }
 

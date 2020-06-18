@@ -7,7 +7,6 @@ import com.example.revtest.presenters.ICurrencyRatesPresenter
 
 class EditTextWatcher(private val presenter: ICurrencyRatesPresenter) : TextWatcher {
     override fun afterTextChanged(s: Editable?) {
-        Log.d("EditTextWatcher", s.toString())
         presenter.setNewBaseCurrencyValue(s.toString())
         presenter.setSelectedCurrencyValue(s.toString())
     }

@@ -32,8 +32,10 @@ class CurrencyRatesListAdapter(
 
     override fun getItemId(position: Int): Long = items[position].currency.hashCode().toLong()
 
+    override fun getItemViewType(position: Int) = items[position].currency.hashCode()
+
     interface IOnRateItemClickListener {
         fun onItemClick(currency: String, currencyValue: String)
-        fun onFocusChanged(v: View, hasFocus: Boolean)
+        fun onFocusChanged(v: View, hasFocus: Boolean, currency: String, currencyValue: String)
     }
 }

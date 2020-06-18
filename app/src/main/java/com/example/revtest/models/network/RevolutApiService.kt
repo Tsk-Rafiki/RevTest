@@ -11,16 +11,14 @@ import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Query
 
-// 'https://hiring.revolut.codes/api/android/latest?base=EUR'
-
-public interface RevolutApiService {
+interface RevolutApiService {
 
     @Headers("Accept: application/json")
     @GET("api/android/latest")
     fun getCurrencyRates(@Query("base") base: String): Observable<CurrencyRates>
 
     companion object Factory {
-        fun create() : RevolutApiService {
+        fun create(): RevolutApiService {
             val interceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
             val client = OkHttpClient.Builder().addInterceptor(interceptor).build();
 
