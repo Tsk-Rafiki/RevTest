@@ -73,22 +73,19 @@ class CurrencyRatesActivity : AppCompatActivity(), IOnRateItemClickListener {
 
     override fun onItemClick(currency: String, currencyValue: String) {
         recyclerView?.smoothScrollToPosition(0)
-        Log.d("Activity", "Setting new currency: $currency, with value $currencyValue")
-//        presenter.setBaseCurrency(currency)
         presenter.setSelectedCurrency(currency)
         presenter.setSelectedCurrencyValue(currencyValue)
-//        presenter.setNewBaseCurrencyValue(currencyValue)
     }
 
     override fun onFocusChanged(
         v: View,
-        hasFocus: Boolean,
-        currency: String,
-        currencyValue: String
+        hasFocus: Boolean
     ) {
         if (hasFocus) {
-//            presenter.setSelectedCurrencyValue(currencyValue)
-//            presenter.setSelectedCurrency(currency)
+            (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).toggleSoftInput(
+                InputMethodManager.SHOW_FORCED,
+                0
+            )
         } else {
             (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
                 v.windowToken,

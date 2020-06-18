@@ -26,8 +26,8 @@ class CurrencyRatesPresenter(
     var currencyData: List<CurrencyData>
     private var baseCurrency = "EUR"
     private var selectedCurrency = "EUR"
-    private var selectedCurrencyRate = 1.0
     private var selectedCurrencyValue = 1.0
+
     private val UNKNOWN_CURRENCY_TEXT = "-"
     private val BASE_CURRENCY_DEFAULT_VALUE = 1.0
     private val RATE_LOOP_TIME_INTERVAL = 1L
@@ -72,9 +72,7 @@ class CurrencyRatesPresenter(
             BiFunction { rates, currency ->
 
                 rates.map { rate ->
-                    // Get information about current currency: icon id, currency description
                     val currentCurrencyData = currencyData.firstOrNull { it.name == rate.currency }
-                    val currentCurrencyRate = getSelectedCurrencyRate(rate.rate)
                     val value = if (baseCurrency == selectedCurrency) currency * rate.rate else selectedCurrencyValue * rate.rate
 
                     CurrencyRatesViewModel(
@@ -89,14 +87,6 @@ class CurrencyRatesPresenter(
         )
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-
-    private fun getSelectedCurrencyRate(currentCurrencyRate: Double) =
-        if (selectedCurrency == baseCurrency) {
-            currentCurrencyRate
-        } else {
-            currentCurrencyRate / selectedCurrencyRate
-        }
-
 
     override fun setNewBaseCurrencyValue(currencyValue: String) {
         baseCurrencyValueObservable = try {

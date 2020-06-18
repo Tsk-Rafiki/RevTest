@@ -34,6 +34,6 @@ class CurrencyRatesListAdapter(
 
     interface IOnRateItemClickListener {
         fun onItemClick(currency: String, currencyValue: String)
-        fun onFocusChanged(v: View, hasFocus: Boolean, currency: String, currencyValue: String)
+        fun onFocusChanged(v: View, hasFocus: Boolean)
     }
 }

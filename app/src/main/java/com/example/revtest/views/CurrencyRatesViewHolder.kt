@@ -45,32 +45,36 @@ class CurrencyRatesViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
         }
     }
 
-    private fun configureTextField(viewModel: CurrencyRatesViewModel, textWatcher: TextWatcher?, onItemClickListener: IOnRateItemClickListener) =
+    private fun configureTextField(
+        viewModel: CurrencyRatesViewModel,
+        textWatcher: TextWatcher?,
+        onItemClickListener: IOnRateItemClickListener
+    ) =
         textField?.let {
             it.removeTextChangedListener(textWatcher)
-            if (!it.isFocused)
+            if (!it.isFocused) {
                 it.setText(viewModel.rate.toString())
+                it.setCursorToEnd()
+            }
             if (viewModel.isBaseCurrency) {
                 it.addTextChangedListener(textWatcher)
-                it.isFocusable = true
+//                it.isFocusable = true
             } else {
-                it.isFocusable = false
+//                it.isFocusable = false
                 it.setOnClickListener {
                     setFocusOnTextField()
                     onItemClickListener.onItemClick(viewModel.currency, viewModel.rate.toString())
                 }
             }
-            it.setCursorToEnd()
 
             it.setOnEditorActionListener { _, actionId, _ ->
-                if(actionId== EditorInfo.IME_ACTION_DONE){
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
                     textField?.clearFocus()
                     true
                 } else false
             }
             it.setOnFocusChangeListener { v, hasFocus ->
-                it.setCursorToEnd()
-                onItemClickListener.onFocusChanged(v, hasFocus, viewModel.currency, viewModel.rate.toString())
+                onItemClickListener.onFocusChanged(v, hasFocus)
             }
         }
 
