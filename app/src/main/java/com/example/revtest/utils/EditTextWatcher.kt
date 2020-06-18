@@ -1,8 +1,7 @@
-package com.example.revtest.models.utils
+package com.example.revtest.utils
 
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import com.example.revtest.presenters.ICurrencyRatesPresenter
 
 class EditTextWatcher(private val presenter: ICurrencyRatesPresenter) : TextWatcher {

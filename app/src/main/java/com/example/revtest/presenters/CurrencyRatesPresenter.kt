@@ -6,9 +6,10 @@ import com.example.revtest.models.data.dto.CurrencyRates
 import com.example.revtest.models.data.entities.CurrencyData
 import com.example.revtest.models.repositories.CurrencyRepositoryProvider
 import com.example.revtest.models.repositories.ICurrencyRepository
-import com.example.revtest.models.utils.roundTo2
+import com.example.revtest.utils.roundTo2
 import io.reactivex.Observable
 import com.example.revtest.models.viewModels.CurrencyRatesViewModel
+import com.example.revtest.utils.capitalizeEachWord
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
@@ -82,7 +83,8 @@ class CurrencyRatesPresenter(
                         countryIconId = currentCurrencyData?.iconId
                             ?: R.drawable.ic_launcher_background,
                         currency = currentCurrencyData?.name ?: UNKNOWN_CURRENCY_TEXT,
-                        description = currentCurrencyData?.description ?: UNKNOWN_CURRENCY_TEXT,
+                        description = currentCurrencyData?.description?.capitalizeEachWord()
+                            ?: UNKNOWN_CURRENCY_TEXT,
                         isBaseCurrency = rate.currency == baseCurrency,
                         rate = value.roundTo2()
                     )

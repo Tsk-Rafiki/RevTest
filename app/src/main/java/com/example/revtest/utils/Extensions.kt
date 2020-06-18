@@ -1,7 +1,8 @@
-package com.example.revtest.models.utils
+package com.example.revtest.utils
 
 import android.util.Log
 import android.widget.EditText
+import java.util.*
 import kotlin.math.roundToInt
 
 fun Double.roundTo2() = try {
@@ -13,3 +14,5 @@ fun Double.roundTo2() = try {
     }
 
 fun EditText.setCursorToEnd() = this.setSelection(this.text.length)
+
+fun String.capitalizeEachWord() = split(" ").joinToString(" ") { it.capitalize() }

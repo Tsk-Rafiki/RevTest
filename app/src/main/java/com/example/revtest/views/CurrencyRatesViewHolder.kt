@@ -10,7 +10,7 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.revtest.R
-import com.example.revtest.models.utils.setCursorToEnd
+import com.example.revtest.utils.setCursorToEnd
 import com.example.revtest.models.viewModels.CurrencyRatesViewModel
 import com.example.revtest.views.CurrencyRatesListAdapter.IOnRateItemClickListener
 

@@ -3,14 +3,12 @@ package com.example.revtest.views
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.SimpleItemAnimator
 import com.example.revtest.R
-import com.example.revtest.models.utils.EditTextWatcher
+import com.example.revtest.utils.EditTextWatcher
 import com.example.revtest.presenters.CurrencyRatesPresenter
 import com.example.revtest.presenters.ICurrencyRatesPresenter
 import com.example.revtest.views.CurrencyRatesListAdapter.IOnRateItemClickListener
