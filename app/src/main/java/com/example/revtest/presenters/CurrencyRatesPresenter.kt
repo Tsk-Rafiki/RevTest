@@ -1,8 +1,8 @@
 package com.example.revtest.presenters
 
 import android.content.Context
-import android.util.Log
 import com.example.revtest.R
+import com.example.revtest.models.data.dto.CurrencyRates
 import com.example.revtest.models.data.entities.CurrencyData
 import com.example.revtest.models.repositories.CurrencyRepositoryProvider
 import com.example.revtest.models.repositories.ICurrencyRepository
@@ -25,21 +25,27 @@ class CurrencyRatesPresenter(
 
     var currencyData: List<CurrencyData>
     private var baseCurrency = "EUR"
+    private var selectedCurrency = "EUR"
+    private var selectedCurrencyRate = 1.0
+    private var selectedCurrencyValue = 1.0
+    private val UNKNOWN_CURRENCY_TEXT = "-"
     private val BASE_CURRENCY_DEFAULT_VALUE = 1.0
+    private val RATE_LOOP_TIME_INTERVAL = 1L
 
     init {
         currencyData = loadImages()
     }
 
-    private val currencyValueSubject: BehaviorSubject<Double> =
-        BehaviorSubject.createDefault(BASE_CURRENCY_DEFAULT_VALUE)
+    private val currencyValueSubject = BehaviorSubject.createDefault(BASE_CURRENCY_DEFAULT_VALUE)
 
-    private var baseCurrencyObservable: Double by Delegates.observable(1.0) { _, _, newValue ->
-        currencyValueSubject.onNext(newValue)
+    private var baseCurrencyValueObservable: Double by Delegates.observable(BASE_CURRENCY_DEFAULT_VALUE) { _, oldValue, newValue ->
+        if (oldValue != newValue)
+            currencyValueSubject.onNext(newValue)
     }
-    private val ratesLooper = Observable.interval(0, 1, TimeUnit.SECONDS)
+    private val ratesLooper = Observable.interval(0, RATE_LOOP_TIME_INTERVAL, TimeUnit.SECONDS)
         .flatMap {
-            Log.d("ratesLooper", "Current thread: ${Thread.currentThread().name}")
+            if (selectedCurrency != baseCurrency)
+                baseCurrency = selectedCurrency
             getLatestRates()
         }
         .repeat()
@@ -64,16 +70,19 @@ class CurrencyRatesPresenter(
             ratesLooper,
             currencyValueSubject,
             BiFunction { rates, currency ->
-                Log.d("getCurrencyRateData", "Current thread: ${Thread.currentThread().name}")
+
                 rates.map { rate ->
-                    val currentCurrency = currencyData.first { it.name == rate.currency }
+                    // Get information about current currency: icon id, currency description
+                    val currentCurrencyData = currencyData.firstOrNull { it.name == rate.currency }
+                    val currentCurrencyRate = getSelectedCurrencyRate(rate.rate)
+                    val value = if (baseCurrency == selectedCurrency) currency * rate.rate else selectedCurrencyValue * rate.rate
+
                     CurrencyRatesViewModel(
-                        countryIconId = currentCurrency.iconId,
-                        currency = currentCurrency.name,
-                        description = currentCurrency.description,
-                        isBaseCurrency = rate.isBaseCurrency,
-                        value = if (!rate.isBaseCurrency) (rate.value * currency).roundTo2()
-                        else rate.value
+                        countryIconId = currentCurrencyData?.iconId ?: R.drawable.ic_launcher_background,
+                        currency = currentCurrencyData?.name ?: UNKNOWN_CURRENCY_TEXT,
+                        description = currentCurrencyData?.description ?: UNKNOWN_CURRENCY_TEXT,
+                        isBaseCurrency = rate.currency == baseCurrency,
+                        rate = value.roundTo2()
                     )
                 }
             }
@@ -81,44 +90,59 @@ class CurrencyRatesPresenter(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
 
+    private fun getSelectedCurrencyRate(currentCurrencyRate: Double) =
+        if (selectedCurrency == baseCurrency) {
+            currentCurrencyRate
+        } else {
+            currentCurrencyRate / selectedCurrencyRate
+        }
+
 
     override fun setNewBaseCurrencyValue(currencyValue: String) {
-        baseCurrencyObservable = try {
+        baseCurrencyValueObservable = try {
             currencyValue.toDouble()
         } catch (ex: NumberFormatException) {
-            1.0
-        }.roundTo2()
+            0.0
+        }
     }
 
     override fun setBaseCurrency(baseCurrency: String) {
+        if (baseCurrency.isEmpty()) return
         this.baseCurrency = baseCurrency
     }
 
     private fun getLatestRates() =
         currencyRepository.getCurrencyRate(baseCurrency.toUpperCase(Locale.getDefault()))
-            .map { result ->
-                Log.d("getLatestRates", "Current thread: ${Thread.currentThread().name}")
+            .map { result: CurrencyRates ->
+                baseCurrency = selectedCurrency
+                baseCurrencyValueObservable = selectedCurrencyValue
                 result.rates.map { item ->
                     CurrencyRatesViewModel(
-                        countryIconId = 1,
                         currency = item.key,
-                        description = item.key,
-                        value = item.value,
-                        isBaseCurrency = false
+                        rate = item.value
                     )
                 }
                     .toMutableList()
                     .apply {
-                        val baseCurrency =
-                            CurrencyRatesViewModel(
-                                countryIconId = -1,
+                        add(
+                            0, CurrencyRatesViewModel(
                                 currency = result.baseCurrency,
-                                description = result.baseCurrency,
-                                value = baseCurrencyObservable,
+                                rate = 1.0,
                                 isBaseCurrency = true
                             )
-                        add(0, baseCurrency)
-                    }
-                    .toList()
+                        )
+                    }.toList()
             }
+
+    override fun setSelectedCurrency(value: String) {
+        selectedCurrency = value
+    }
+
+    override fun setSelectedCurrencyValue(value: String) {
+        selectedCurrencyValue = try {
+            value.toDouble()
+        } catch (ex: NumberFormatException) {
+            0.0
+        }
+    }
 }

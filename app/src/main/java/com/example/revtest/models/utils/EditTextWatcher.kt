@@ -9,6 +9,7 @@ class EditTextWatcher(private val presenter: ICurrencyRatesPresenter) : TextWatc
     override fun afterTextChanged(s: Editable?) {
         Log.d("EditTextWatcher", s.toString())
         presenter.setNewBaseCurrencyValue(s.toString())
+        presenter.setSelectedCurrencyValue(s.toString())
     }
 
     override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {

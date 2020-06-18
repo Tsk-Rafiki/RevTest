@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.revtest.models.viewModels.CurrencyRatesViewModel
 
 class CurrencyRatesListAdapter(
-    private val textWatcher: TextWatcher?,
+    private val textWatcher: TextWatcher,
     private val onItemClickListener: IOnRateItemClickListener
 ) : RecyclerView.Adapter<CurrencyRatesViewHolder>() {
     private var items = listOf<CurrencyRatesViewModel>()
@@ -33,7 +33,7 @@ class CurrencyRatesListAdapter(
     override fun getItemId(position: Int): Long = items[position].currency.hashCode().toLong()
 
     interface IOnRateItemClickListener {
-        fun onItemClick(currency: String)
-        fun onFocusChanged(v: View, hasFocus: Boolean)
+        fun onItemClick(currency: String, currencyValue: String)
+        fun onFocusChanged(v: View, hasFocus: Boolean, currency: String, currencyValue: String)
     }
 }

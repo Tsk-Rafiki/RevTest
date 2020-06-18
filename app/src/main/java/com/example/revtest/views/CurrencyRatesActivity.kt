@@ -8,7 +8,6 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.SimpleItemAnimator
 import com.example.revtest.R
 import com.example.revtest.models.utils.EditTextWatcher
 import com.example.revtest.presenters.CurrencyRatesPresenter
@@ -29,11 +28,14 @@ class CurrencyRatesActivity : AppCompatActivity(), IOnRateItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        initViews()
+    }
+
+    private fun initViews() {
         presenter = CurrencyRatesPresenter(context = this)
         textWatcher = EditTextWatcher(presenter)
         adapter = CurrencyRatesListAdapter(textWatcher, this).apply { setHasStableIds(true) }
-
-        (recyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+//        (recyclerView?.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         recyclerView?.layoutManager = LinearLayoutManager(this)
         recyclerView?.adapter = adapter
     }
@@ -56,12 +58,6 @@ class CurrencyRatesActivity : AppCompatActivity(), IOnRateItemClickListener {
             })
     }
 
-    override fun onPause() {
-        super.onPause()
-        Log.d("[Activity]", "Lifecycle method: onPause")
-        disposable?.dispose()
-    }
-
     private fun showErrorDialog(title: String, text: String) {
         AlertDialog.Builder(this)
             .setTitle(title)
@@ -69,12 +65,31 @@ class CurrencyRatesActivity : AppCompatActivity(), IOnRateItemClickListener {
             .show()
     }
 
-    override fun onItemClick(currency: String) {
-        presenter.setBaseCurrency(currency)
+    override fun onPause() {
+        super.onPause()
+        Log.d("[Activity]", "Lifecycle method: onPause")
+        disposable?.dispose()
     }
 
-    override fun onFocusChanged(v: View, hasFocus: Boolean) {
-        if (!hasFocus) {
+    override fun onItemClick(currency: String, currencyValue: String) {
+        recyclerView?.smoothScrollToPosition(0)
+        Log.d("Activity", "Setting new currency: $currency, with value $currencyValue")
+//        presenter.setBaseCurrency(currency)
+        presenter.setSelectedCurrency(currency)
+        presenter.setSelectedCurrencyValue(currencyValue)
+//        presenter.setNewBaseCurrencyValue(currencyValue)
+    }
+
+    override fun onFocusChanged(
+        v: View,
+        hasFocus: Boolean,
+        currency: String,
+        currencyValue: String
+    ) {
+        if (hasFocus) {
+//            presenter.setSelectedCurrencyValue(currencyValue)
+//            presenter.setSelectedCurrency(currency)
+        } else {
             (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
                 v.windowToken,
                 0

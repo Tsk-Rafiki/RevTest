@@ -3,6 +3,7 @@ package com.example.revtest.views
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RelativeLayout
@@ -37,26 +38,46 @@ class CurrencyRatesViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
         title?.text = viewModel.currency
         description?.text = viewModel.description
         countryFlag?.setImageResource(viewModel.countryIconId)
-        textField?.removeTextChangedListener(textWatcher)
-
-        if (!viewModel.isBaseCurrency) {
-            textField?.setText(viewModel.value.toString())
-            textField?.setOnClickListener {
-                onItemClickListener.onItemClick(viewModel.currency)
-            }
-        } else {
-            textField?.setOnFocusChangeListener { v, hasFocus ->
-                textField?.setCursorToEnd()
-                onItemClickListener.onFocusChanged(v, hasFocus)
-            }
-            textField?.addTextChangedListener(textWatcher)
-        }
-
+        configureTextField(viewModel, textWatcher, onItemClickListener)
         layout?.setOnClickListener {
-            textField?.isFocusableInTouchMode = true
-            textField?.requestFocus()
-            textField?.isFocusableInTouchMode = false
-            onItemClickListener.onItemClick(viewModel.currency)
+            setFocusOnTextField()
+            onItemClickListener.onItemClick(viewModel.currency, viewModel.rate.toString())
         }
+    }
+
+    private fun configureTextField(viewModel: CurrencyRatesViewModel, textWatcher: TextWatcher?, onItemClickListener: IOnRateItemClickListener) =
+        textField?.let {
+            it.removeTextChangedListener(textWatcher)
+            if (!it.isFocused)
+                it.setText(viewModel.rate.toString())
+            if (viewModel.isBaseCurrency) {
+                it.addTextChangedListener(textWatcher)
+                it.isFocusable = true
+            } else {
+                it.isFocusable = false
+                it.setOnClickListener {
+                    setFocusOnTextField()
+                    onItemClickListener.onItemClick(viewModel.currency, viewModel.rate.toString())
+                }
+            }
+            it.setCursorToEnd()
+
+            it.setOnEditorActionListener { _, actionId, _ ->
+                if(actionId== EditorInfo.IME_ACTION_DONE){
+                    textField?.clearFocus()
+                    true
+                } else false
+            }
+            it.setOnFocusChangeListener { v, hasFocus ->
+                it.setCursorToEnd()
+                onItemClickListener.onFocusChanged(v, hasFocus, viewModel.currency, viewModel.rate.toString())
+            }
+        }
+
+    private fun setFocusOnTextField() {
+        textField?.isFocusableInTouchMode = true
+        textField?.requestFocus()
+        textField?.isFocusableInTouchMode = false
+
     }
 }
